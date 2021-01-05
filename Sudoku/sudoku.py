@@ -65,6 +65,11 @@ class Game:
             self.board[pos[0]][pos[1]] = val
         self.squares[pos[0]][pos[1]].set_value(val)
 
+    def clear_temp_values(self):
+        for r in range(self.rows):
+            for c in range(self.cols):
+                self.squares[r][c].set_temp_value(0)
+
     #checks to see if any squares are invalid
     def check_invalid(self):
         for r in range(self.rows):
@@ -93,6 +98,7 @@ class Game:
         self.board = copy.deepcopy(self.original_board)
         self.set_all_squares()
         self.selected = None
+        self.clear_temp_values()
 
     #clears all the values from the board
     def clear_board(self):
@@ -101,15 +107,14 @@ class Game:
         self.board = [[0 for i in range(9)] for x in range(9)]
         self.squares = [[Square(self.screen,(self.width/self.cols),(self.height/self.rows),row,col) for row in range(self.rows)] for col in range(self.cols)]
         self.selected = None
+        self.clear_temp_values()
 
     #resets the board to the original version
     def reset_board(self):
         self.board = copy.deepcopy(self.original_board)
         self.set_all_squares()
         self.selected = None
-        for r in range(self.rows):
-            for c in range(self.cols):
-                self.squares[r][c].set_temp_value(0)
+        self.clear_temp_values()
 
     #checks to see if all the spots are filled to determine if the winner has won
     def check_win(self):
@@ -709,6 +714,7 @@ def game_board_screen(screen):
                     elif event.key == pygame.K_DELETE or event.key == pygame.K_SPACE or event.key == pygame.K_0:
                         value = 0
                     elif event.key == pygame.K_RETURN and cur != 0:
+                        value = 0
                         game.set_square(cur)
                         if game.solution_board[row][col] == cur:
                             game.squares[row][col].set_valid(True)
@@ -719,7 +725,8 @@ def game_board_screen(screen):
                         else:
                             game.lose()
                             game.end(True)
-                            print("Streak Ended at " + str(player.streak) + " wins")
+                            if player.streak > 0:
+                                print("Streak Ended at " + str(player.streak) + " wins")
                             player.update_streak(False)
                             buttons = [newgame_btn,home_btn,reset_btn]
                     
