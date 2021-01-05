@@ -748,9 +748,9 @@ def main():
     screen = pygame.display.set_mode((800, 600))
     pygame.display.set_caption("Sudoku")
 
-    #uncomment if you downloaded the icon into the program directory
-    #icon = pygame.image.load('sudoku_icon.png')
-    #pygame.display.set_icon(icon)
+    #comment out if you did not download the icon into the program directory
+    icon = pygame.image.load('sudoku_icon.png')
+    pygame.display.set_icon(icon)
 
     game_state = GameState.TITLE
 
